@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 
 import { CreatePkmnDto } from './dto/create-pkmn.dto'
 import { UpdatePkmnDto } from './dto/update-pkmn.dto'
@@ -12,7 +12,7 @@ export class PkmnsService {
   paginationPkmnsCache = new Map<string, Pkmn[]>()
 
   create(createPkmnDto: CreatePkmnDto) {
-    return 'This action adds a new pkmn'
+    return Promise.resolve(`This action adds a new ${createPkmnDto.name}`)
   }
 
   async findAll(paginationDto: PaginationDto) {
@@ -32,21 +32,21 @@ export class PkmnsService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} pkmn`
+    return this.getPkmnInfo(id)
   }
 
   update(id: number, updatePkmnDto: UpdatePkmnDto) {
-    return `This action updates a #${id} pkmn`
+    return Promise.resolve(`This action updates a #${id} pkmn`)
   }
 
   remove(id: number) {
-    return `This action removes a #${id} pkmn`
+    return Promise.resolve(`This action removes a #${id} pkmn`)
   }
 
   private async getPkmnInfo(id: number): Promise<Pkmn> {
-    const data = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`).then(
-      (res) => res.json() as Promise<PkmnResponse>,
-    )
+    const result = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
+    if (result.status === 404) throw new NotFoundException(`Pkmn with id ${id} not found`)
+    const data = (await result.json()) as PkmnResponse
     return {
       id: data.id,
       name: data.name,

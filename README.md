@@ -63,3 +63,8 @@ test('suma dos números correctamente', () => {
   expect(resultado).toBe(5)
 })
 ```
+
+## Herramientas
+
+- `spyOn`: es un interceptor de las llamadas a un método, o sea, verifica si fue llamado y cuántas veces.
+  - `mockImplementation`: simular una implementación del método _sin ser llamado_.
