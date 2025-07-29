@@ -8,7 +8,7 @@ Características de las pruebas:
 - Rápidas
 - Flexibles
 
-![Tipos de prueba](images/screen01.png)
+![Tipos de prueba](./images/screen01.png)
 
 **Unitarias**
 
@@ -68,3 +68,7 @@ test('suma dos números correctamente', () => {
 
 - `spyOn`: es un interceptor de las llamadas a un método, o sea, verifica si fue llamado y cuántas veces.
   - `mockImplementation`: simular una implementación del método _sin ser llamado_.
+
+**_Créditos_**
+
+👉 [https://cursos.devtalles.com/courses/NestJS-Testing](https://cursos.devtalles.com/courses/NestJS-Testing)
