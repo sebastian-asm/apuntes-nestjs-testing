@@ -8,7 +8,7 @@ Características de las pruebas:
 - Rápidas
 - Flexibles
 
-![Tipos de prueba](./images/screen01.png)
+![Tipos de prueba](/images/screen01.png)
 
 **Unitarias**
 

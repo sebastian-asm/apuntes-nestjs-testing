@@ -79,11 +79,10 @@ describe('PkmnsController', () => {
   it('should have called the service with the correct id and data (update)', async () => {
     const id = '1'
     const updatePkmnDto = { name: 'updated-bulbasaur' }
-    jest
-      .spyOn(service, 'update')
-      .mockImplementation(() => Promise.resolve(`This action updates a #${id} pkmn`))
-    const result = await controller.update(id, updatePkmnDto)
-    expect(result).toBe(`This action updates a #${id} pkmn`)
+    jest.spyOn(service, 'update').mockImplementation(() => Promise.resolve(mockPkmns[0]))
+    await controller.update(id, updatePkmnDto)
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    expect(service.update).toHaveBeenCalledWith(+id, updatePkmnDto)
   })
 
   it('should have called delete with the correct id (delete)', async () => {
@@ -93,5 +92,12 @@ describe('PkmnsController', () => {
       .mockImplementation(() => Promise.resolve(`This action removes a #${id} pkmn`))
     const result = await controller.remove(id)
     expect(result).toBe(`This action removes a #${id} pkmn`)
+  })
+
+  it('should call create service method', async () => {
+    jest.spyOn(service, 'create').mockImplementation(() => Promise.resolve(mockPkmns[0]))
+    await controller.create({ name: 'demo', type: 'demo' })
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    expect(service.create).toHaveBeenLastCalledWith({ name: 'demo', type: 'demo' })
   })
 })

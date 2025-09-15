@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
 
 import { CreatePkmnDto } from './dto/create-pkmn.dto'
 import { UpdatePkmnDto } from './dto/update-pkmn.dto'
@@ -10,9 +10,20 @@ import { Pkmn } from './entities/pkmn.entity'
 @Injectable()
 export class PkmnsService {
   paginationPkmnsCache = new Map<string, Pkmn[]>()
+  PkmnCache = new Map<number, Pkmn>()
 
   create(createPkmnDto: CreatePkmnDto) {
-    return Promise.resolve(`This action adds a new ${createPkmnDto.name}`)
+    const pkmn: Pkmn = {
+      ...createPkmnDto,
+      id: new Date().getTime(),
+      hp: createPkmnDto.hp ?? 0,
+      sprites: createPkmnDto.sprites ?? [],
+    }
+    this.PkmnCache.forEach((p) => {
+      if (pkmn.name === p.name) throw new BadRequestException(`${pkmn.name} already exists`)
+    })
+    this.PkmnCache.set(pkmn.id, pkmn)
+    return Promise.resolve(pkmn)
   }
 
   async findAll(paginationDto: PaginationDto) {
@@ -31,16 +42,25 @@ export class PkmnsService {
     return pkmns
   }
 
-  findOne(id: number) {
-    return this.getPkmnInfo(id)
+  async findOne(id: number) {
+    if (this.PkmnCache.has(id)) return this.PkmnCache.get(id)
+    const pkmn = await this.getPkmnInfo(id)
+    if (!pkmn) throw new NotFoundException(`Pkmn with id ${id} not found`)
+    this.PkmnCache.set(id, pkmn)
+    return pkmn
   }
 
-  update(id: number, updatePkmnDto: UpdatePkmnDto) {
-    return Promise.resolve(`This action updates a #${id} pkmn`)
+  async update(id: number, updatePkmnDto: UpdatePkmnDto) {
+    const pkmn = await this.findOne(id)
+    const updatedPkmn = { ...pkmn!, ...updatePkmnDto }
+    this.PkmnCache.set(id, updatedPkmn)
+    return Promise.resolve(updatedPkmn)
   }
 
-  remove(id: number) {
-    return Promise.resolve(`This action removes a #${id} pkmn`)
+  async remove(id: number) {
+    const pkmn = await this.findOne(id)
+    this.PkmnCache.delete(id)
+    return Promise.resolve(`Pkmn #${pkmn!.name} removed`)
   }
 
   private async getPkmnInfo(id: number): Promise<Pkmn> {
