@@ -28,10 +28,10 @@ export class PkmnsService {
 
   async findAll(paginationDto: PaginationDto) {
     const { page = 1, limit = 10 } = paginationDto
-    const ofsfset = (page - 1) * limit
+    const offset = (page - 1) * limit
     const cacheKey = `${page}-${limit}`
     if (this.paginationPkmnsCache.has(cacheKey)) return this.paginationPkmnsCache.get(cacheKey)!
-    const url = `https://pokeapi.co/api/v2/pokemon?offset=${ofsfset}&limit=${limit}`
+    const url = `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`
     const data = await fetch(url).then((response) => response.json() as Promise<PokeApiResponse>)
     const pkmnsPromises = data.results.map((result) => {
       const id = result.url.split('/').at(-2)!
@@ -58,9 +58,9 @@ export class PkmnsService {
   }
 
   async remove(id: number) {
-    const pkmn = await this.findOne(id)
+    await this.findOne(id)
     this.PkmnCache.delete(id)
-    return Promise.resolve(`Pkmn #${pkmn!.name} removed`)
+    return Promise.resolve('Pkmn removed')
   }
 
   private async getPkmnInfo(id: number): Promise<Pkmn> {
