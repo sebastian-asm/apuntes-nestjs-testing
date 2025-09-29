@@ -11,7 +11,7 @@ import {
 } from 'typeorm'
 
 import { ProductImage } from './product-image.entity'
-import { User } from 'src/auth/entities/user.entity'
+import { User } from '../../auth/entities/user.entity'
 
 // asignando nombre a la tabla en la db
 @Entity({ name: 'products' })
