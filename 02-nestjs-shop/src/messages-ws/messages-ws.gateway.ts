@@ -11,7 +11,7 @@ import { Server, Socket } from 'socket.io'
 
 import { MessagesWsService } from './messages-ws.service'
 import { NewMessageDto } from './dtos/new-message.dto'
-import { JwtPayload } from 'src/interfaces'
+import { JwtPayload } from '../interfaces'
 
 @WebSocketGateway({ cors: true })
 // implementaciones que permiten saber cuando un cliente se conecta o desconecta

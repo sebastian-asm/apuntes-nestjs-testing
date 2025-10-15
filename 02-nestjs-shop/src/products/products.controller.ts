@@ -11,13 +11,13 @@ import {
 } from '@nestjs/common'
 import { ApiResponse, ApiTags } from '@nestjs/swagger'
 
-import { Auth, GetUser } from 'src/auth/decorators'
+import { Auth, GetUser } from '../auth/decorators'
 import { CreateProductDto } from './dto/create-product.dto'
-import { PaginationDto } from 'src/common/dtos/pagination.dto'
+import { PaginationDto } from '../common/dtos/pagination.dto'
 import { ProductsService } from './products.service'
 import { UpdateProductDto } from './dto/update-product.dto'
-import { User } from 'src/auth/entities/user.entity'
-import { ValidRoles } from 'src/interfaces'
+import { User } from '../auth/entities/user.entity'
+import { ValidRoles } from '../interfaces'
 import { Product } from './entities'
 
 @ApiTags('Productos')

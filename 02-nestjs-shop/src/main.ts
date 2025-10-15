@@ -4,9 +4,12 @@ import { ValidationPipe } from '@nestjs/common'
 
 import { AppModule } from './app.module'
 
-async function bootstrap() {
+export async function bootstrap() {
   const app = await NestFactory.create(AppModule)
+  const port = process.env.PORT || 3000
+
   app.setGlobalPrefix('api')
+  app.enableCors()
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -23,7 +26,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config)
   SwaggerModule.setup('api', app, document)
 
-  await app.listen(process.env.PORT)
-  console.log('Server run on port', process.env.PORT)
+  await app.listen(port)
+  console.log('Server run on port', port)
 }
 bootstrap()
